@@ -11,9 +11,6 @@ const UserRoutes = () => {
 
   const pathname = window.location.pathname;
 
-  console.log(paths, "paths");
-  console.log(pathname, "pathname");
-
   return (
     <Switch>
       {routes?.map((route, i) => (
