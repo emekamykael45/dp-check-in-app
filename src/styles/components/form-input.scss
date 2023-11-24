@@ -1,0 +1,105 @@
+.form_group_container {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin: 0;
+  }
+
+  .form-group {
+    display: grid;
+    margin-bottom: 0;
+
+    label {
+      margin-bottom: 8px;
+      font-weight: 400;
+      font-size: 0.9em;
+      color: $color-text-light;
+    }
+
+    .flex_input {
+      @include flex-position(flex-start, center);
+      gap: 8px;
+      width: 100%;
+      border: 1px solid $color-input-border;
+      border-radius: 3px;
+
+      .form-control {
+        padding: 12px !important;
+        font-size: 1em;
+        width: inherit;
+        height: auto;
+        border: none;
+        border-radius: 3px;
+        color: $color-text;
+
+        &:focus {
+          box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+          outline: 0px auto -webkit-focus-ring-color !important;
+          outline: none;
+          border: none !important;
+        }
+
+        &:-webkit-autofill,
+        &:-webkit-autofill:hover,
+        &:-webkit-autofill:focus,
+        &:-webkit-autofill:active {
+          box-shadow: 0 0 0 30px white inset !important;
+          -webkit-box-shadow: 0 0 0 30px white inset !important;
+        }
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        /* Firefox */
+        &[type="number"] {
+          -moz-appearance: textfield;
+        }
+
+        &[type="file"] {
+          padding-left: 17px !important;
+        }
+
+        &input:read-only {
+          background-color: $color-input-border;
+          opacity: 1;
+        }
+      }
+
+      .icon {
+        margin-right: 8px;
+        cursor: pointer;
+      }
+
+      &:focus-within {
+        box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+        outline: 0px auto -webkit-focus-ring-color !important;
+        outline: none;
+        border: 1px solid $color-primary !important;
+      }
+    }
+  }
+
+  span {
+    display: flex;
+    margin-top: 3px;
+    font-size: 0.875em;
+    line-height: normal;
+    color: $color-error;
+  }
+
+  .input-hint {
+    font-size: 12px;
+    font-weight: 500;
+    color: $color-text-light;
+    display: flex;
+    margin-top: 5px;
+
+    a {
+      margin-left: 4px;
+    }
+  }
+}

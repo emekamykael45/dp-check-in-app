@@ -1,0 +1,41 @@
+.search_container {
+  @include flex-position(flex-start, center);
+  gap: 8px;
+  padding: 7px 12px 8px 12px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid $color-disabled;
+  border-radius: 35px;
+
+  svg {
+    margin-top: 1px;
+    width: 16px;
+    height: 16px;
+
+    path {
+      fill: $color-primary;
+    }
+  }
+
+  .form_group_container {
+    width: calc(100% - 16px);
+
+    .form-control {
+      padding: 0 !important;
+      font-size: 0.9em;
+      font-weight: 500;
+      color: $color-text;
+      width: 100%;
+      background: transparent;
+      border: none !important;
+
+      &::placeholder {
+        color: $color-text-light !important;
+      }
+
+      &:focus {
+        border: none !important;
+      }
+    }
+  }
+}

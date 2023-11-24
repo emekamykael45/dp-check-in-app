@@ -1,0 +1,51 @@
+.button_component {
+  &.loading {
+    padding: 8px 30px !important;
+    padding-bottom: 9px !important;
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  .left_icon {
+    margin-right: 8px;
+  }
+
+  .right_icon {
+    margin-left: 8px;
+  }
+
+  svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .loader_img_container {
+    @include flex-position(center, center);
+
+    .spinner {
+      width: 100%;
+      text-align: center;
+      animation: spin 0.4s ease-in-out infinite;
+      -webkit-animation: spin 0.4s ease-in-out infinite;
+
+      @keyframes spin {
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+      @-webkit-keyframes spin {
+        to {
+          -webkit-transform: rotate(360deg);
+        }
+      }
+
+      svg {
+        width: 35px;
+        height: 35px;
+      }
+    }
+  }
+}
