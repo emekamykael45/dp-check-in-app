@@ -1,0 +1,85 @@
+.checkin_page_container {
+  .logo_container {
+    margin-bottom: 30px;
+    padding-top: 50px;
+    justify-content: flex-start;
+
+    img {
+      width: 94px;
+    }
+  }
+
+  .form_container {
+    @include flex-position(center, center);
+    flex-direction: column;
+    padding: 32px 18px;
+    padding-bottom: 60px;
+    width: 100%;
+    border: 1px solid $color-disabled;
+    border-radius: 12px;
+    box-shadow: $box-shadow-2;
+
+    .title {
+      margin: 0 auto 0 0;
+      margin-bottom: 30px;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+
+    .form_group_container {
+      width: 100%;
+
+      .form-control {
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 1.5em;
+      }
+    }
+
+    .btn {
+      width: 100%;
+    }
+
+    &.success {
+      img {
+        width: 80px;
+        height: 80px;
+      }
+
+      .title {
+        margin: 0;
+        margin-top: 8px;
+        margin-bottom: 30px;
+        font-size: 1.2em;
+        font-weight: 600;
+      }
+
+      .code_block {
+        @include flex-position(center, center);
+        flex-direction: column;
+        padding: 10px 12px;
+        width: 100%;
+        border: 2px dashed $color-primary;
+        border-radius: 8px;
+        background: $color-white;
+
+        .label {
+          margin-bottom: 3px;
+          font-size: 0.9em;
+          font-weight: 500;
+        }
+
+        .value {
+          font-size: 1.5em;
+          font-weight: 600;
+        }
+      }
+
+      .btn {
+        margin-top: 32px;
+        width: 100%;
+      }
+    }
+  }
+}

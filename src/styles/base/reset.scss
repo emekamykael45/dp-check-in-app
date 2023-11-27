@@ -89,7 +89,7 @@ input[readonly] {
 
 .app_container {
   margin: 0 auto;
-  max-width: 500px;
+  max-width: $app-width;
   width: 100%;
   min-height: 100vh;
   background: $color-white;
@@ -98,12 +98,48 @@ input[readonly] {
   border-bottom: none;
 }
 
+.dashboard {
+  position: relative;
+  width: 100%;
+}
+
 .page_container {
   padding: 0px 18px 50px 18px;
+  width: 100%;
 
   @include smScreen {
     padding-left: 12px;
     padding-right: 12px;
+  }
+}
+
+.section_header {
+  @include flex-position(space-between, center);
+  margin-bottom: 8px;
+
+  p {
+    font-size: 1.1em;
+    font-weight: 600;
+  }
+
+  a {
+    @include flex-position(flex-end, center);
+    gap: 3px;
+    font-weight: 600;
+    color: $color-primary;
+
+    &.btn_primary {
+      padding: 8px 20px;
+      padding-bottom: 9px;
+      font-size: 0.9em;
+      color: $color-white;
+    }
+
+    svg {
+      path {
+        fill: $color-primary;
+      }
+    }
   }
 }
 
@@ -147,6 +183,24 @@ input[readonly] {
   color: $color-primary !important;
   background: $color-white !important;
   border: 1px solid $color-primary;
+
+  &:hover,
+  &:focus {
+    @extend .btn_secondary;
+  }
+
+  path {
+    stroke: $color-primary;
+  }
+}
+
+.btn_text {
+  @extend .btn;
+  padding: 0 !important;
+  color: $color-primary !important;
+  width: fit-content !important;
+  background: none !important;
+  border: none !important;
 
   &:hover,
   &:focus {

@@ -1,0 +1,55 @@
+.home_page_container {
+  .logo_container {
+    margin-bottom: 30px;
+    padding-top: 50px;
+    justify-content: flex-start;
+
+    img {
+      width: 94px;
+    }
+  }
+
+  .overview {
+    @include grid-columns(1fr 1fr, 18px);
+    margin-bottom: 30px;
+
+    .stat {
+      padding: 24px 18px;
+      border-radius: 10px;
+
+      &:first-child {
+        background: linear-gradient(180deg, #9046ff 27.08%, #7a3cda 100%);
+        box-shadow: 0px 10px 30px 0px rgba(176, 176, 176, 0.51);
+      }
+
+      &:last-child {
+        background: linear-gradient(180deg, #2bcae5 0%, #2ba3b7 100%);
+        box-shadow: 0px 10px 20px 0px rgba(59, 45, 143, 0.25);
+      }
+
+      svg {
+        display: block;
+        margin: 0 0 0 auto;
+        margin-bottom: 12px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .value {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: $color-white;
+      }
+
+      .label {
+        font-size: 0.9em;
+        font-weight: 500;
+        color: $color-white;
+      }
+    }
+  }
+
+  .table_container {
+    margin-bottom: 30px;
+  }
+}

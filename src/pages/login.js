@@ -43,10 +43,12 @@ const SignInPage = () => {
   if (user?.uid && !isSubmitting) return <>{window.location.assign("/home")}</>;
 
   return (
-    <div className="page_container login_page">
+    <div className="page_container login_page_container">
       <div className="form_container">
         <form className="form">
           <Logo />
+
+          {/* <p className="title">Staff login</p> */}
 
           <FormInput
             label="Email"
