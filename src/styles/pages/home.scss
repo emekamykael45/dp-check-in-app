@@ -51,5 +51,15 @@
 
   .table_container {
     margin-bottom: 30px;
+
+    .table {
+      @include smScreen2 {
+        width: 450px;
+
+        .text_wrap {
+          width: 115px;
+        }
+      }
+    }
   }
 }
