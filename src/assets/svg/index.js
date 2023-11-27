@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Arrow } from "./arrow";
+import { Delete } from "./delete";
 import { Guest } from "./guest";
 import { Home } from "./home";
 import { Logout } from "./logout";
@@ -11,6 +12,8 @@ const Icon = ({ name }) => {
   switch (name) {
     case "arrow":
       return <Arrow />;
+    case "delete":
+      return <Delete />;
     case "guest":
       return <Guest />;
     case "home":

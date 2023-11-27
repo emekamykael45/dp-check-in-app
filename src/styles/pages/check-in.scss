@@ -37,8 +37,18 @@
       }
     }
 
-    .btn {
+    .actions {
+      margin-top: 12px;
       width: 100%;
+
+      .btn {
+        width: 100%;
+
+        &.btn_text {
+          margin: 0 auto;
+          margin-top: 16px;
+        }
+      }
     }
 
     &.success {

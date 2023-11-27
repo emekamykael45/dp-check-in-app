@@ -9,11 +9,12 @@ import Button from "../../components/button";
 
 import { check } from "../../assets/img";
 
-// import { loginUserAction } from "../../api";
+import { addGuestAction } from "../../api";
 
 import {
   textFormValidation,
   numberFormValidation,
+  generateCode,
 } from "../../utils/functions";
 
 const NewGuestPage = () => {
@@ -26,14 +27,29 @@ const NewGuestPage = () => {
   });
   const history = useHistory();
 
+  const [newCode, setNewCode] = useState("");
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const submitForm = async (data) => {
     setIsSubmitting(true);
 
-    console.log(data);
-    setStep(2);
+    const code = generateCode();
+
+    const payload = {
+      name: data.name?.toLowerCase(),
+      phone: data.phone?.toLowerCase(),
+      code,
+      checked_in: false,
+      created_at: new Date().toISOString(),
+    };
+
+    await addGuestAction(payload).then((res) => {
+      if (res.success === true) {
+        setNewCode(code);
+        setStep(2);
+      }
+    });
 
     setIsSubmitting(false);
   };
@@ -95,7 +111,7 @@ const NewGuestPage = () => {
 
             <div className="code_block">
               <p className="label">Code:</p>
-              <p className="value">C98P</p>
+              <p className="value">{newCode}</p>
             </div>
 
             <Button

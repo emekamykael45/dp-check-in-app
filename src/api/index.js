@@ -4,16 +4,22 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   collection,
   limit,
+  getCountFromServer,
   query,
   where,
+  or,
+  doc,
+  setDoc,
+  getDoc,
   getDocs,
-  // getDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 import { logout, useLocalStorage, getRequestError } from "../utils/functions";
-import { APP_USER } from "../utils/constants";
+import { APP_API_GUESTS, APP_USER } from "../utils/constants";
 
-const userCollection = collection(db, "user");
+const guestsColl = collection(db, APP_API_GUESTS);
 
 export const loginUserAction = async (data) => {
   const email = data?.email;
@@ -43,25 +49,87 @@ export const logoutUserAction = () => {
     });
 };
 
-export const getOverviewDataAction = async (data) => {
-  const uid = data.uid.trim();
-  const userQ = query(userCollection, where("uid", "==", uid), limit(1));
+export const getOverviewDataAction = async () => {
+  const checkedInQuery = query(guestsColl, where("checked_in", "==", true));
+  const checkedInSnapshot = await getCountFromServer(checkedInQuery);
 
-  const influencerCollection = collection(db, "influencer");
-  const influencerQ = query(
-    influencerCollection,
-    where("uid", "==", uid),
-    limit(1)
-  );
+  const uncheckedQuery = query(guestsColl, where("checked_in", "==", false));
+  const uncheckedSnapshot = await getCountFromServer(uncheckedQuery);
 
-  const userResult = await getDocs(userQ);
-  const influencerResult = await getDocs(influencerQ);
-
-  console.log(userResult, "userResult");
-  console.log(influencerResult, "influencerResult");
-
-  return {
-    checked: 30,
-    unchecked: 1200,
+  let data = {
+    checked_in: checkedInSnapshot.data().count,
+    unchecked: uncheckedSnapshot.data().count,
   };
+
+  return data;
+};
+
+export const addGuestAction = async (data) => {
+  const guestsRef = guestsColl;
+
+  try {
+    await setDoc(doc(guestsRef), data);
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+};
+
+export const getGuestsAction = async (data) => {
+  const q = guestsColl;
+  const snapshot = await getCountFromServer(q);
+
+  let querySnapshot = null;
+
+  if (data?.searchInput) {
+    querySnapshot = await getDocs(
+      query(
+        guestsColl,
+        or(
+          where("name", "==", data?.searchInput),
+          where("code", "==", data?.searchInput),
+          where("phone", "==", data?.searchInput)
+        ),
+        limit(30)
+      )
+    );
+  } else {
+    querySnapshot = await getDocs(query(guestsColl, limit(30)));
+  }
+
+  let guests = {
+    total: snapshot.data().count,
+    data: [],
+  };
+
+  querySnapshot.forEach((doc) => {
+    guests.data.push({ ...doc.data(), id: doc.id });
+  });
+
+  return guests;
+};
+
+export const checkInGuestAction = async (data) => {
+  const guestsRef = doc(db, APP_API_GUESTS, data?.id);
+
+  try {
+    await updateDoc(guestsRef, {
+      ...data?.data,
+    });
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
+};
+
+export const deleteGuestAction = async (data) => {
+  try {
+    await deleteDoc(doc(db, APP_API_GUESTS, data));
+    return { success: true };
+  } catch (err) {
+    console.log(err);
+    return { success: false };
+  }
 };
