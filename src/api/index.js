@@ -4,20 +4,27 @@ import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   collection,
   limit,
+  limitToLast,
   getCountFromServer,
   query,
   where,
   or,
+  orderBy,
+  startAfter,
+  endBefore,
   doc,
   setDoc,
-  getDoc,
   getDocs,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
 
 import { logout, useLocalStorage, getRequestError } from "../utils/functions";
-import { APP_API_GUESTS, APP_USER } from "../utils/constants";
+import {
+  APP_API_GUESTS,
+  APP_USER,
+  APP_API_GET_LIMIT,
+} from "../utils/constants";
 
 const guestsColl = collection(db, APP_API_GUESTS);
 
@@ -91,11 +98,33 @@ export const getGuestsAction = async (data) => {
           where("code", "==", data?.searchInput),
           where("phone", "==", data?.searchInput)
         ),
-        limit(30)
+        limit(APP_API_GET_LIMIT)
+      )
+    );
+  }
+
+  if (data?.paginatePrev && data?.firstRecord) {
+    querySnapshot = await getDocs(
+      query(
+        guestsColl,
+        orderBy("created_at", "asc"),
+        endBefore(data?.firstRecord),
+        limitToLast(APP_API_GET_LIMIT)
+      )
+    );
+  } else if (data?.paginateNext && data?.lastRecord) {
+    querySnapshot = await getDocs(
+      query(
+        guestsColl,
+        orderBy("created_at", "asc"),
+        startAfter(data?.lastRecord),
+        limit(APP_API_GET_LIMIT)
       )
     );
   } else {
-    querySnapshot = await getDocs(query(guestsColl, limit(30)));
+    querySnapshot = await getDocs(
+      query(guestsColl, orderBy("created_at", "asc"), limit(APP_API_GET_LIMIT))
+    );
   }
 
   let guests = {
@@ -107,7 +136,11 @@ export const getGuestsAction = async (data) => {
     guests.data.push({ ...doc.data(), id: doc.id });
   });
 
-  return guests;
+  return {
+    guests,
+    firstRecord: querySnapshot.docs[0],
+    lastRecord: querySnapshot.docs[querySnapshot.docs.length - 1],
+  };
 };
 
 export const checkInGuestAction = async (data) => {

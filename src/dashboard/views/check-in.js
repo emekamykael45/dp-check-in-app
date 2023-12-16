@@ -21,7 +21,7 @@ const CheckinPage = () => {
     await getGuestsAction({
       searchInput: code?.toLowerCase(),
     }).then((res) => {
-      if (res?.data?.length > 0) {
+      if (res?.guests?.data?.length > 0) {
         handleCheckInGuest({
           id: res?.data[0]?.id,
           data: {

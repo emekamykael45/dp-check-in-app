@@ -61,5 +61,23 @@
         }
       }
     }
+
+    .pagination {
+      @include flex-position(space-between, center);
+      padding: 8px 12px;
+
+      .page {
+        font-size: 0.95em;
+
+        span {
+          font-weight: 600;
+        }
+      }
+
+      .btn {
+        padding: 3px 10px;
+        padding-bottom: 4px;
+      }
+    }
   }
 }

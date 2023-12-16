@@ -28,7 +28,7 @@ const HomePage = () => {
 
   const getGuests = async () => {
     await getGuestsAction().then((res) => {
-      setAllGuests(res);
+      setAllGuests(res.guests);
     });
 
     setIsFetching(false);

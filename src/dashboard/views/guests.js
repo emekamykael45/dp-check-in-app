@@ -10,15 +10,25 @@ import Table from "../../components/table";
 import { getGuestsAction, deleteGuestAction } from "../../api";
 
 import { capitalizeWord, formatNumber } from "../../utils/functions";
+import { APP_API_GET_LIMIT } from "../../utils/constants";
 import Icon from "../../assets/svg";
 
 const GuestsPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [allGuests, setAllGuests] = useState(null);
+  const [firstRecord, setFirstRecord] = useState(null);
+  const [lastRecord, setLastRecord] = useState(null);
+  const [page, setPage] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    if (searchInput?.length < 1) {
+    paginateNext();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (searchInput?.length > 1) {
       searchGuests();
     }
 
@@ -28,11 +38,11 @@ const GuestsPage = () => {
   const searchGuests = async () => {
     setIsFetching(true);
 
-    await getGuestsAction({ searchInput: searchInput?.toLowerCase() }).then(
-      (res) => {
-        setAllGuests(res);
-      }
-    );
+    await getGuestsAction({
+      searchInput: searchInput?.toLowerCase(),
+    }).then((res) => {
+      setAllGuests(res.guests);
+    });
 
     setIsFetching(false);
   };
@@ -55,7 +65,35 @@ const GuestsPage = () => {
     }
   };
 
+  const paginatePrev = async () => {
+    setIsFetching(true);
+
+    await getGuestsAction({ paginatePrev: true, firstRecord }).then((res) => {
+      setPage(page - 1);
+      setAllGuests(res.guests);
+      setFirstRecord(res.firstRecord);
+      setLastRecord(res.lastRecord);
+    });
+
+    setIsFetching(false);
+  };
+
+  const paginateNext = async () => {
+    setIsFetching(true);
+
+    await getGuestsAction({ paginateNext: true, lastRecord }).then((res) => {
+      setPage(page + 1);
+      setAllGuests(res.guests);
+      setFirstRecord(res.firstRecord);
+      setLastRecord(res.lastRecord);
+    });
+
+    setIsFetching(false);
+  };
+
   const tableHeaders = ["GUEST", "CODE", "CHKD IN", "PHONE NUMBER", ""];
+
+  const totalPages = Math.ceil(allGuests?.total / APP_API_GET_LIMIT || 0);
 
   return (
     <React.Fragment>
@@ -117,6 +155,26 @@ const GuestsPage = () => {
               </tr>
             ))}
           </Table>
+
+          <div className="pagination">
+            <Button
+              text="<<"
+              className="btn_secondary"
+              onClick={paginatePrev}
+              disabled={page < 2}
+            />
+
+            <p className="page">
+              Page <span>{page}</span> / {totalPages}
+            </p>
+
+            <Button
+              text=">>"
+              className="btn_secondary"
+              onClick={paginateNext}
+              disabled={page === totalPages}
+            />
+          </div>
         </div>
       </div>
     </React.Fragment>
