@@ -156,25 +156,27 @@ const GuestsPage = () => {
             ))}
           </Table>
 
-          <div className="pagination">
-            <Button
-              text="<<"
-              className="btn_secondary"
-              onClick={paginatePrev}
-              disabled={page < 2}
-            />
+          {!searchInput && (
+            <div className="pagination">
+              <Button
+                text="<<"
+                className="btn_secondary"
+                onClick={paginatePrev}
+                disabled={page < 2}
+              />
 
-            <p className="page">
-              Page <span>{page}</span> / {totalPages}
-            </p>
+              <p className="page">
+                Page <span>{page}</span> / {totalPages}
+              </p>
 
-            <Button
-              text=">>"
-              className="btn_secondary"
-              onClick={paginateNext}
-              disabled={page === totalPages}
-            />
-          </div>
+              <Button
+                text=">>"
+                className="btn_secondary"
+                onClick={paginateNext}
+                disabled={page === totalPages}
+              />
+            </div>
+          )}
         </div>
       </div>
     </React.Fragment>

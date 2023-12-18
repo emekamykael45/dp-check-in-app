@@ -89,20 +89,6 @@ export const getGuestsAction = async (data) => {
 
   let querySnapshot = null;
 
-  if (data?.searchInput) {
-    querySnapshot = await getDocs(
-      query(
-        guestsColl,
-        or(
-          where("name", "==", data?.searchInput),
-          where("code", "==", data?.searchInput),
-          where("phone", "==", data?.searchInput)
-        ),
-        limit(APP_API_GET_LIMIT)
-      )
-    );
-  }
-
   if (data?.paginatePrev && data?.firstRecord) {
     querySnapshot = await getDocs(
       query(
@@ -121,9 +107,35 @@ export const getGuestsAction = async (data) => {
         limit(APP_API_GET_LIMIT)
       )
     );
+  } else if (data?.searchInput) {
+    querySnapshot = await getDocs(
+      query(
+        guestsColl,
+        or(
+          where("name", "==", data?.searchInput),
+          where("code", "==", data?.searchInput),
+          where("phone", "==", data?.searchInput)
+        ),
+        limit(APP_API_GET_LIMIT)
+      )
+    );
   } else {
     querySnapshot = await getDocs(
       query(guestsColl, orderBy("created_at", "asc"), limit(APP_API_GET_LIMIT))
+    );
+  }
+
+  if (data?.searchInput) {
+    querySnapshot = await getDocs(
+      query(
+        guestsColl,
+        or(
+          where("name", "==", data?.searchInput),
+          where("code", "==", data?.searchInput),
+          where("phone", "==", data?.searchInput)
+        ),
+        limit(APP_API_GET_LIMIT)
+      )
     );
   }
 
