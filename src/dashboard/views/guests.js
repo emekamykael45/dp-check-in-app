@@ -22,18 +22,27 @@ const GuestsPage = () => {
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
-    paginateNext();
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     if (searchInput?.length > 1) {
       searchGuests();
+    } else {
+      getFirstPage();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchInput]);
+
+  const getFirstPage = async () => {
+    setIsFetching(true);
+
+    await getGuestsAction().then((res) => {
+      setPage(1);
+      setAllGuests(res.guests);
+      setFirstRecord(res.firstRecord);
+      setLastRecord(res.lastRecord);
+    });
+
+    setIsFetching(false);
+  };
 
   const searchGuests = async () => {
     setIsFetching(true);

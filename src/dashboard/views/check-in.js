@@ -23,7 +23,7 @@ const CheckinPage = () => {
     }).then((res) => {
       if (res?.guests?.data?.length > 0) {
         handleCheckInGuest({
-          id: res?.data[0]?.id,
+          id: res?.guests?.data[0]?.id,
           data: {
             checked_in: checkInValue,
           },
