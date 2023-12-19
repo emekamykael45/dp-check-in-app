@@ -9,7 +9,11 @@ import Table from "../../components/table";
 
 import { getGuestsAction, deleteGuestAction } from "../../api";
 
-import { capitalizeWord, formatNumber } from "../../utils/functions";
+import {
+  isAdminUser,
+  capitalizeWord,
+  formatNumber,
+} from "../../utils/functions";
 import { APP_API_GET_LIMIT } from "../../utils/constants";
 import Icon from "../../assets/svg";
 
@@ -18,14 +22,13 @@ const GuestsPage = () => {
   const [allGuests, setAllGuests] = useState(null);
   const [firstRecord, setFirstRecord] = useState(null);
   const [lastRecord, setLastRecord] = useState(null);
+  const [sortByAsc, setSortByAsc] = useState(true);
   const [page, setPage] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     if (searchInput?.length > 1) {
       searchGuests();
-    } else {
-      getFirstPage();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,7 +37,7 @@ const GuestsPage = () => {
   const getFirstPage = async () => {
     setIsFetching(true);
 
-    await getGuestsAction().then((res) => {
+    await getGuestsAction({ sortByAsc }).then((res) => {
       setPage(1);
       setAllGuests(res.guests);
       setFirstRecord(res.firstRecord);
@@ -43,6 +46,11 @@ const GuestsPage = () => {
 
     setIsFetching(false);
   };
+  useEffect(() => {
+    getFirstPage();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortByAsc]);
 
   const searchGuests = async () => {
     setIsFetching(true);
@@ -77,12 +85,14 @@ const GuestsPage = () => {
   const paginatePrev = async () => {
     setIsFetching(true);
 
-    await getGuestsAction({ paginatePrev: true, firstRecord }).then((res) => {
-      setPage(page - 1);
-      setAllGuests(res.guests);
-      setFirstRecord(res.firstRecord);
-      setLastRecord(res.lastRecord);
-    });
+    await getGuestsAction({ paginatePrev: true, sortByAsc, firstRecord }).then(
+      (res) => {
+        setPage(page - 1);
+        setAllGuests(res.guests);
+        setFirstRecord(res.firstRecord);
+        setLastRecord(res.lastRecord);
+      }
+    );
 
     setIsFetching(false);
   };
@@ -90,12 +100,14 @@ const GuestsPage = () => {
   const paginateNext = async () => {
     setIsFetching(true);
 
-    await getGuestsAction({ paginateNext: true, lastRecord }).then((res) => {
-      setPage(page + 1);
-      setAllGuests(res.guests);
-      setFirstRecord(res.firstRecord);
-      setLastRecord(res.lastRecord);
-    });
+    await getGuestsAction({ paginateNext: true, sortByAsc, lastRecord }).then(
+      (res) => {
+        setPage(page + 1);
+        setAllGuests(res.guests);
+        setFirstRecord(res.firstRecord);
+        setLastRecord(res.lastRecord);
+      }
+    );
 
     setIsFetching(false);
   };
@@ -114,9 +126,11 @@ const GuestsPage = () => {
         <div className="section_header">
           <p>All guests ({formatNumber(allGuests?.total || 0)})</p>
 
-          <Link to="/guests/new" className="btn_primary">
-            + Add new
-          </Link>
+          {isAdminUser() && (
+            <Link to="/guests/new" className="btn_primary">
+              + Add new
+            </Link>
+          )}
         </div>
 
         <div className="table_container">
@@ -130,9 +144,9 @@ const GuestsPage = () => {
             </div>
 
             <Button
-              text="Search"
+              text={sortByAsc ? "asc>" : "desc<"}
               className="btn_secondary"
-              onClick={searchGuests}
+              onClick={() => setSortByAsc(!sortByAsc)}
             />
           </div>
 
@@ -156,9 +170,13 @@ const GuestsPage = () => {
                   <p>{row?.phone}</p>
                 </td>
                 <td>
-                  <p onClick={() => deleteGuest(row)}>
-                    <Icon name="delete" />
-                  </p>
+                  {isAdminUser() ? (
+                    <p onClick={() => deleteGuest(row)}>
+                      <Icon name="delete" />
+                    </p>
+                  ) : (
+                    ""
+                  )}
                 </td>
               </tr>
             ))}

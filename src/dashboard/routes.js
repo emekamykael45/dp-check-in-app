@@ -2,10 +2,15 @@ import { Switch, Route, Redirect } from "react-router-dom";
 
 import Navigations from "./navigations";
 
+import { isAdminUser } from "../utils/functions";
+
 const UserRoutes = () => {
   let navs = Navigations || [];
 
-  const routes = navs?.filter((x) => x?.to);
+  let routes = navs?.filter((x) => x?.to);
+  if (!isAdminUser()) {
+    routes = routes?.filter((x) => x?.to !== "/guests/new");
+  }
 
   const paths = routes?.map((x) => x?.to);
 

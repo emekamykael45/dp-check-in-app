@@ -31,6 +31,13 @@ export const getUserDetails = () => {
   return user ? user : null;
 };
 
+export const isAdminUser = () => {
+  const user = getUserDetails();
+
+  if (user?.email === "adminn@gmail.com") return true;
+  return false;
+};
+
 export const getRequestError = (errorMessage) => {
   if (errorMessage) {
     alert(errorMessage);

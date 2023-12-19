@@ -88,12 +88,13 @@ export const getGuestsAction = async (data) => {
   const snapshot = await getCountFromServer(q);
 
   let querySnapshot = null;
+  let sortBy = data?.sortByAsc ? "asc" : "desc";
 
   if (data?.paginatePrev && data?.firstRecord) {
     querySnapshot = await getDocs(
       query(
         guestsColl,
-        orderBy("created_at", "asc"),
+        orderBy("created_at", sortBy),
         endBefore(data?.firstRecord),
         limitToLast(APP_API_GET_LIMIT)
       )
@@ -102,7 +103,7 @@ export const getGuestsAction = async (data) => {
     querySnapshot = await getDocs(
       query(
         guestsColl,
-        orderBy("created_at", "asc"),
+        orderBy("created_at", sortBy),
         startAfter(data?.lastRecord),
         limit(APP_API_GET_LIMIT)
       )
@@ -121,7 +122,7 @@ export const getGuestsAction = async (data) => {
     );
   } else {
     querySnapshot = await getDocs(
-      query(guestsColl, orderBy("created_at", "asc"), limit(APP_API_GET_LIMIT))
+      query(guestsColl, orderBy("created_at", sortBy), limit(APP_API_GET_LIMIT))
     );
   }
 
