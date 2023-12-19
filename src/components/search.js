@@ -2,7 +2,7 @@ import FormInput from "./form-input";
 
 import Icon from "../assets/svg";
 
-const Search = ({ isLoading, onSearch }) => {
+const Search = ({ onSearch }) => {
   return (
     <div className="search_container">
       <Icon name="search" />
@@ -10,7 +10,6 @@ const Search = ({ isLoading, onSearch }) => {
       <FormInput
         type="text"
         placeholder="Search"
-        readOnly={isLoading}
         onChange={(e) => onSearch(e.target.value)}
       />
     </div>

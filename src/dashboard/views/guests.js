@@ -126,7 +126,6 @@ const GuestsPage = () => {
                 placeholder="Search by code, name or phone"
                 type="text"
                 onChange={(e) => setSearchInput(e?.target?.value)}
-                readOnly={isFetching}
               />
             </div>
 
